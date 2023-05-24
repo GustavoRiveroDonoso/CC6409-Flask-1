@@ -4,8 +4,8 @@ El modelo utilizado está contenido en [HuggingFace](https://huggingface.co/mrm8
 Se divide la app en 2:
 * web: se encarga de la página web: renderizar el template HTML, enviar la POST con el texto a procesar y recibir la respuesta.
 * AI-model: contiene la instancia del modelo y se encarga de procesar el texto que recibe en `server:5001/summ`
-\
-Para utilizarlo:
+---
+###Para utilizarlo:
 * Instalar PyTorch: `pip install torch`
 * Instalar Flask: `pip install flask`
 * Instalar transformers: `pip install transformers`
