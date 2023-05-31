@@ -15,6 +15,33 @@ def index_form():
     return render_template('index.html')
 
 
+"""
+import requests
+from flask import Flask, request
+
+app = Flask(__name__)
+
+@app.route('/call_openai', methods=['POST'])
+def call_openai():
+    if request.method == 'POST':
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer YOUR_API_KEY'  # Reemplaza YOUR_API_KEY con tu clave de API de OpenAI
+        }
+        data = {
+            'model': 'text-davinci-003',
+            'prompt': '..<prompt>..',
+            'temperature': 0.5,
+            'max_tokens': 200
+        }
+        response = requests.post('https://api.openai.com/v1/completions', headers=headers, json=data)
+        return response.json()
+
+if __name__ == '__main__':
+    app.run()
+"""
+
+
 @app.route('/', methods=['POST'])
 def index_image():
     text = request.form
@@ -35,8 +62,10 @@ def index_image():
         files = {'texto': codecs.open(filepath, 'rb')}
         if DEBUG:
             print(files['texto'])
-        apicall = requests.post(API_URL, files=files)
-
+        headers = {
+            "MiEncabezado": "PongaAquiSuHeader"
+        }
+        apicall = requests.post(API_URL, files=files, headers=headers)
         #   Recibimos la respuesta
         if apicall.status_code == 200:
             summary = apicall.content.decode()
@@ -47,7 +76,30 @@ def index_image():
             result = None
         
         #   Mostramos la respuesta
-        return render_template('index.html', result=result, error=error)
+        prompt = "Resume esto pero sin comenzar con la frase en resumen: " + text['text']
+        print("Este es nuestro prompt: " + prompt)
+        data = {
+            "model": "text-davinci-003",
+            "prompt": prompt,
+            "temperature": 0.5,
+            "max_tokens": 200
+        }
+        # Configurar la autenticación con la clave de la API
+        headersOpenIA = {
+            "Authorization": "Bearer tu_clave_de_api_de_openai" 
+        }
+        # Realizar la solicitud POST a la API de OpenAI
+        response = requests.post("https://api.openai.com/v1/completions", json=data, headers=headersOpenIA)
+        # Obtener la respuesta generada por ChatGPT
+        print("Aqui viene el response: ")
+        print(response)
+        if response.status_code == 401:
+            error = 'Error de autenticación. Verifica tu clave de API.'
+            return render_template('index.html', error=error)
+        reply = response.json()["choices"][0]["text"]
+        return render_template('index.html', result=result, result2=reply, error=error)
+        #return render_template('index.html', result=result, error=error)
+    
 
 
 @app.route('/display/<filename>')

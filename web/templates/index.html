@@ -21,7 +21,12 @@
     </form>
     {% if result is not none %}
     <div class="response response-ok">
-        Resumen: <p>{{result}}</p>
+        Resumen usando PyTorch: <p>{{result}} <br></p>
+
+    </div>
+    <div class="response response-ok">
+      
+        Resumen usando ChatGPT: <p>{{result2}} <br></p>
     </div>
     {% else %}
     <div class="response response-error">
