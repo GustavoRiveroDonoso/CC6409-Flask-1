@@ -86,7 +86,9 @@ def index_image():
         }
         # Configurar la autenticación con la clave de la API
         headersOpenIA = {
-            "Authorization": "Bearer tu_clave_de_api_de_openai" 
+            "Authorization": "Bearer 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",
+            "OpenAI-Organization": "org-hui8j2DuRQmRs8U1VJY11A4Q"
+
         }
         # Realizar la solicitud POST a la API de OpenAI
         response = requests.post("https://api.openai.com/v1/completions", json=data, headers=headersOpenIA)
